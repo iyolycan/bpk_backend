@@ -1,0 +1,4 @@
+﻿
+$Url = "https://localhost:7206/api/Bpk/SendReminder"
+
+Invoke-RestMethod -Method 'Get' -Uri "https://localhost:7206/api/Bpk/SendReminder"

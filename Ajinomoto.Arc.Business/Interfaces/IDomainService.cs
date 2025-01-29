@@ -1,0 +1,97 @@
+﻿using Ajinomoto.Arc.Data.Models;
+using Microsoft.EntityFrameworkCore.Storage;
+
+namespace Ajinomoto.Arc.Business.Interfaces
+{
+    public interface IDomainService
+    {
+        IQueryable<AppAction> GetAllAppAction();
+        IQueryable<AppConfig> GetAllAppConfig();
+        IQueryable<AppUser> GetAllAppUser();
+        IQueryable<AppUserArea> GetAllAppUserArea();
+        IQueryable<AppUserBranch> GetAllAppUserBranch();
+        IQueryable<Area> GetAllArea();
+        IQueryable<Bpk> GetAllBpk();
+        // IQueryable<BpkMasterStatus> GetAllMasterStatusBpk();
+        IQueryable<BpkDetail> GetAllBpkDetail();
+        IQueryable<BpkHistory> GetAllBpkHistory();
+        IQueryable<BpkStatus> GetAllBpkStatus();
+        IQueryable<Branch> GetAllBranch();
+        IQueryable<ClearingStatus> GetAllClearingStatus();
+        IQueryable<Customer> GetAllCustomer();
+        IQueryable<DataLevel> GetAllDataLevel();
+        IQueryable<IncomingPayment> GetAllIncomingPayment();
+        IQueryable<IncomingPaymentCutOff> GetAllIncomingPaymentCutOff();
+        IQueryable<IncomingPaymentNonSpm> GetAllIncomingPaymentNonSpm();
+        IQueryable<IncomingPaymentView> GetAllIncomingPaymentView();
+        IQueryable<Invoice> GetAllInvoice();
+        IQueryable<KpiSummary> GetAllKpiSummary();
+        IQueryable<KpiProperty> GetAllKpiProperty();
+        IQueryable<Potongan> GetAllPotongan();
+        IQueryable<PotonganType> GetAllPotonganType();
+        IQueryable<Role> GetAllRole();
+        IQueryable<RoleArea> GetAllRoleArea();
+        IQueryable<RoleBranch> GetAllRoleBranch();
+        IQueryable<Segment> GetAllSegment();
+        IQueryable<SegmentKpiProperty> GetAllSegmentKpiProperty();
+        IQueryable<Source> GetAllSource();
+        IQueryable<TemplateUploadType> GetAllTemplateUploadType();
+        IQueryable<UserView> GetAllUserView();
+        void UpdateAppConfig(AppConfig model);
+        int InsertAppUser(AppUser model);
+        void UpdateAppUser(AppUser model);
+        Guid InsertAppUserArea(AppUserArea model);
+        void DeleteAppUserArea(AppUserArea model);
+        Guid InsertAppUserBranch(AppUserBranch model);
+        void DeleteAppUserBranch(AppUserBranch model);
+        int InsertArea(Area model);
+        void UpdateArea(Area model);
+        void DeleteArea(Area model);
+        Guid InsertBpk(Bpk model);
+        void UpdateBpk(Bpk model);
+        void UpdateBulkBpk(List<Bpk> models);
+        void DeleteBpk(Bpk model);
+        Guid InsertBpkDetail(BpkDetail model);
+        void UpdateBpkDetail(BpkDetail model);
+        void UpdateBulkBpkDetail(List<BpkDetail> models);
+        void DeleteBpkDetail(BpkDetail model);
+        Guid InsertBpkHistory(BpkHistory model);
+        void UpdateBpkHistory(BpkHistory model);
+        void DeleteBpkHistory(BpkHistory model);
+        int InsertBranch(Branch model);
+        void UpdateBranch(Branch model);
+        void DeleteBranch(Branch model);
+        Guid InsertIncomingPayment(IncomingPayment model);
+        void UpdateIncomingPayment(IncomingPayment model);
+        void UpdateBulkIncomingPayment(List<IncomingPayment> models);
+        void DeleteIncomingPayment(IncomingPayment model);
+        Guid InsertIncomingPaymentCutOff(IncomingPaymentCutOff model);
+        void UpdateIncomingPaymentCutOff(IncomingPaymentCutOff model);
+        Guid InsertIncomingPaymentNonSpm(IncomingPaymentNonSpm model);
+        void UpdateIncomingPaymentNonSpm(IncomingPaymentNonSpm model);
+        Guid InsertPotongan(Potongan model);
+        void UpdatePotongan(Potongan model);
+        void DeletePotongan(Potongan model);
+        int InsertPotonganType(PotonganType model);
+        void UpdatePotonganType(PotonganType model);
+        void DeletePotonganType(PotonganType model);
+        int InsertRole(Role model);
+        void UpdateRole(Role model);
+        void DeleteRole(Role model);
+        Guid InsertRoleArea(RoleArea model);
+        void UpdateRoleArea(RoleArea model);
+        void DeleteRoleArea(RoleArea model);
+        Guid InsertRoleBranch(RoleBranch model);
+        void UpdateRoleBranch(RoleBranch model);
+        void DeleteRoleBranch(RoleBranch model);
+        int InsertSegment(Segment model);
+        void UpdateSegment(Segment model);
+        void DeleteSegment(Segment model);
+        int InsertSource(Source model);
+        void UpdateSource(Source model);
+        void DeleteSource(Source model);
+        IDbContextTransaction BeginTransaction();
+
+        void SaveChanges();
+    }
+}

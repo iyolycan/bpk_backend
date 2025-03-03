@@ -61,6 +61,12 @@
         CustomerName
     }
 
+    public enum InvoiceDetailsColumn
+    {
+        DocDate,
+        CustomerName
+    }
+
     public enum KpiPropertyEnum
     {
         ArTransaction = 1,

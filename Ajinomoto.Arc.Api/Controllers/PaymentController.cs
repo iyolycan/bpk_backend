@@ -27,12 +27,40 @@ namespace Ajinomoto.Arc.Api.Controllers
             return Ok(resVal);
         }
 
+        [Route("InvoiceDetails")]
+        [HttpPost]
+        public async Task<ActionResult> GetInvoiceDetailsList(InvoiceDetailsRequest request)
+        {
+            var resVal = await _paymentFacade.GetInvoiceDetailsList(request);
+
+            return Ok(resVal);
+        }
+
+        [Route("UpdateBaseLine")]
+        [HttpPost]
+        public async Task<ActionResult> UpdateBaseLine(UpdateBaseLineRequest request)
+        {
+            var resVal = await _paymentFacade.UpdateBaseLine(request);
+
+            return Ok(resVal);
+        }
+
         [Authorize((int)RoleEnum.Administrator, (int)RoleEnum.Coec)]
         [Route("ImportIncomingPayment")]
         [HttpPost]
         public async Task<ActionResult> ImportIncomingPayment([FromForm] ImportIncomingPaymentRequest request)
         {
             var resVal = await _paymentFacade.ImportIncomingPayment(request);
+
+            return Ok(resVal);
+        }
+
+        [Authorize((int)RoleEnum.Administrator, (int)RoleEnum.Coec)]
+        [Route("ImportInvoice")]
+        [HttpPost]
+        public async Task<ActionResult> ImportInvoice([FromForm] ImportInvoiceRequest request)
+        {
+            var resVal = await _paymentFacade.ImportInvoice(request);
 
             return Ok(resVal);
         }

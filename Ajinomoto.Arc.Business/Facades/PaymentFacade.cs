@@ -40,9 +40,47 @@ namespace Ajinomoto.Arc.Business.Facades
             return errorResponse;
         }
 
+        public async Task<ResultBase<InvoiceDetailsListResponse>> GetInvoiceDetailsList(InvoiceDetailsRequest param)
+        {
+            var result = await _incomingPaymentService.GetInvoiceDetailsList(param.Filter, param.SortOrder, 
+                param.CurrentSort, param.SortDirection, param.Limit, param.Page, param.Cabang, param.Customer, param.StatusTukarFaktur, param.Status, param.FromDate, param.ToDate);
+
+            if (result != null)
+            {
+                return new ResultBase<InvoiceDetailsListResponse>()
+                {
+                    Success = true,
+                    Message = MessageConstants.S_SUCCESSFULLY,
+                    Model = result
+                };
+            }
+
+            var errorResponse = new ResultBase<InvoiceDetailsListResponse>()
+            {
+                Success = false,
+                Message = MessageConstants.S_DATA_NOT_FOUND,
+                Model = result
+            };
+
+            return errorResponse;
+        }
+
         public async Task<ResultBase> ImportIncomingPayment(ImportIncomingPaymentRequest param)
         {
             var result = await _incomingPaymentService.ImportIncomingPayment(param);
+
+            return result;
+        }
+        public async Task<ResultBase> ImportInvoice(ImportInvoiceRequest param)
+        {
+            var result = await _incomingPaymentService.ImportInvoice(param);
+
+            return result;
+        }
+
+        public async Task<ResultBase> UpdateBaseLine(UpdateBaseLineRequest param)
+        {
+            var result = await _incomingPaymentService.UpdateBaseLine(param);
 
             return result;
         }

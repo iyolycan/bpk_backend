@@ -1,4 +1,5 @@
 ﻿using Ajinomoto.Arc.Business.Interfaces;
+using Ajinomoto.Arc.Common.AppModels;
 using Ajinomoto.Arc.Common.Constants;
 using Ajinomoto.Arc.Common.DtoModels;
 using Serilog;
@@ -140,6 +141,58 @@ namespace Ajinomoto.Arc.Business.Modules
                     throw;
                 }
             }).ConfigureAwait(false);
+        }
+
+        public async Task<ResultBase> UpdateBaseLine(UpdateBaseLineRequest request)
+        {
+        
+            var result = new ResultBase { Success = false };
+            return await Task.Run(async () =>
+            {    
+                try
+                {
+                    if (request.InvoiceDetailsId == null)
+                    {
+                        result.Message = "Invoice details ID is null.";
+                        return result;
+                    }
+
+                    var invoiceDetails = _domainService.GetInvoiceDetailsById(request.InvoiceDetailsId).FirstOrDefault();
+                    if (invoiceDetails == null)
+                    {
+                        result.Message = "Invoice details not found.";
+                        return result;
+                    }
+
+                    if (request.TglTerimaDoBack != null)
+                    {
+                        invoiceDetails.TglTerimaDOBack = request.TglTerimaDoBack;
+                    }
+                    if (request.TglTerimaFakturPajak != null)
+                    {
+                        invoiceDetails.TglTerimaFakturPajak = request.TglTerimaFakturPajak;
+                    }
+                    if (request.TglCompletedDoc != null)
+                    {
+                        invoiceDetails.TglCompletedDoc = request.TglCompletedDoc;
+                    }
+                    if (request.TglTukarFaktur != null)
+                    {
+                        invoiceDetails.TglTukarFaktur = request.TglTukarFaktur;
+                    }
+
+                    _domainService.UpdateInvoiceDetails(invoiceDetails);
+
+                    result.Success = true;
+                    result.Message = "Invoice details updated successfully.";
+                    return result;
+                }
+                catch (Exception ex)
+                {
+                    result.Message = $"Error updating invoice details: {ex.Message}";
+                    return result;
+                }
+            });
         }
     }
 }

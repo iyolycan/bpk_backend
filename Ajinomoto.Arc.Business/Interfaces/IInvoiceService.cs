@@ -1,4 +1,5 @@
-﻿using Ajinomoto.Arc.Common.DtoModels;
+﻿using Ajinomoto.Arc.Common.AppModels;
+using Ajinomoto.Arc.Common.DtoModels;
 
 namespace Ajinomoto.Arc.Business.Interfaces
 {
@@ -6,5 +7,7 @@ namespace Ajinomoto.Arc.Business.Interfaces
     {
         Task<InvoiceResponse> GetInvoice(string invoiceNumber);
         Task<ValidateMultipleInvoiceResponse> ValidateMultipleInvoices(List<string> invoices);
+
+        Task<ResultBase> UpdateBaseLine(UpdateBaseLineRequest request);
     }
 }

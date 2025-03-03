@@ -12,6 +12,8 @@ using Serilog;
 using System.Data;
 using Ajinomoto.Arc.Data.Models;
 using System;
+using Microsoft.EntityFrameworkCore;
+using System.Diagnostics;
 
 namespace Ajinomoto.Arc.Business.Modules
 {
@@ -21,6 +23,7 @@ namespace Ajinomoto.Arc.Business.Modules
         private readonly IProfileService _profileService;
         private readonly IHistoryService _historyService;
         private readonly IMasterDataService _masterDataService;
+        private readonly DbContext _context;
 
         private readonly AppSettings _appSettings;
 
@@ -106,6 +109,75 @@ namespace Ajinomoto.Arc.Business.Modules
                 }
             }).ConfigureAwait(false);
         }
+        
+        public async Task<InvoiceDetailsListResponse> GetInvoiceDetailsList(
+            string filter,
+            InvoiceDetailsColumn? sortOrder,
+            InvoiceDetailsColumn currentSort,
+            SortingDirection? sortDirection,
+            int limit = ConfigConstants.N_DEFAULT_PAGESIZE,
+            int page = ConfigConstants.N_DEFAULT_PAGE,
+            string? Cabang = null,
+            int? Customer = null,
+            string? Status = null,
+            string? StatusTukarFaktur = null,
+            DateOnly? FromDate = null,
+            DateOnly? ToDate = null)
+        {
+            return await Task.Run(() =>
+            {
+                try
+                {
+                    var result = new InvoiceDetailsListResponse();
+
+                    // Base query to fetch data from the invoice_details table
+                    var query = QueryInvoiceDetailstList(filter, sortOrder, sortDirection);
+
+                    // Add conditional filtering based on the provided parameters.
+                    if (Cabang != "")
+                        query = query.Where(p => p.CabangId == Cabang);
+
+                    if (Customer != null && Customer > 0)
+                        query = query.Where(p => p.IDCustomerSoldTo == Customer);
+
+                    if (Status != "")
+                        query = query.Where(p => p.Status == Status);
+
+                    if (StatusTukarFaktur != "")
+                        query = query.Where(p => p.StatusTukarFaktur == StatusTukarFaktur);
+                    
+                    // Filter by date range
+                    if (FromDate.HasValue)
+                        query = query.Where(p => p.DocDate >= FromDate);
+
+                    if (ToDate.HasValue)
+                        query = query.Where(p => p.DocDate <= ToDate);
+
+                    // Paginate the results
+                    var data = PagedList<InvoiceDetailsDto>.ToPagedList(query, page, limit);
+                    // Console.WriteLine("Fetched data: " + query.ToQueryString());
+                    // Map the results to the response object
+                    return result =  new InvoiceDetailsListResponse
+                    {
+                        CurrentPage = data.CurrentPage,
+                        TotalCount = data.TotalCount,
+                        PageSize = data.PageSize,
+                        TotalPages = data.TotalPages,
+                        Filter = filter,
+                        CurrentSort = sortOrder.Value,
+                        SortDirection = sortDirection.Value,
+                        Items = data
+                    };
+                }
+                catch (Exception ex)
+                {
+                    Log.Logger.Error($"Method: GetInvoiceDetailsList(), filter: {filter}, " +
+                        $"sortOrder: {sortOrder}, currentSort: {currentSort}, " +
+                        $"limit: {limit}, page: {page} Message: {ex.Message}");
+                    throw;
+                }
+            }).ConfigureAwait(false);
+        }
 
         public async Task<ResultBase> ImportIncomingPayment(ImportIncomingPaymentRequest param)
         {
@@ -177,6 +249,38 @@ namespace Ajinomoto.Arc.Business.Modules
                             result.Message = "Template not found.";
                             break;
                     }
+
+                    return result;
+                }
+                catch (Exception ex)
+                {
+                    Log.Logger.Error($"Method: ImportIncomingPayment(), param: {param}, Message: {ex.Message}");
+                    throw;
+                }
+            }).ConfigureAwait(false);
+        }
+        public async Task<ResultBase> ImportInvoice(ImportInvoiceRequest param)
+        {
+            return await Task.Run(() =>
+            {
+                try
+                {
+                    var result = new ResultBase
+                    {
+                        Success = false,
+                        Message = ""
+                    };
+
+                    var fileUpload = param.FileUpload;
+
+                    Directory.CreateDirectory(_appSettings.StoredFilesPath);
+                    var filePath = Path.Combine(_appSettings.StoredFilesPath, Path.GetRandomFileName().Replace(".", string.Empty) + ".xlsx");
+                    using (var stream = File.Create(filePath))
+                    {
+                        fileUpload.CopyTo(stream);
+                    }
+                    
+                    result = ImportInvoiceTemplate01(filePath);
 
                     return result;
                 }
@@ -1060,6 +1164,97 @@ namespace Ajinomoto.Arc.Business.Modules
             return query;
         }
 
+        private IQueryable<InvoiceDetailsDto> QueryInvoiceDetailstList(string filter,
+            InvoiceDetailsColumn? sortOrder,
+            SortingDirection? sortDirection)
+        {
+            var userLogin = _profileService.GetUserLogin();
+            var areaIds = userLogin.AreaIds;
+
+            // Adjust the query to match invoice_details table structure
+            var query = from a in _domainService.GetAllInvoiceDetailsView()
+                        select new InvoiceDetailsDto
+                        {
+                            InvoiceDetailsId = a.InvoiceDetailsId,
+                            CabangId = a.CabangId ?? "", 
+                            CustomerName = a.CustomerName ?? "", 
+                            SalesGrup = a.SalesGrup ?? "", 
+                            FiscalYear = a.FiscalYear ?? "",
+                            IDCustomerSoldTo = a.IDCustomerSoldTo,
+                            DocumentNumber = a.DocumentNumber,
+                            NoInvoice = a.NoInvoice ?? "", 
+                            NoPO = a.NoPO ?? "", 
+                            AmtInLocCur = a.AmtInLocCur,
+                            ShipTo = a.ShipTo,
+                            Store = a.Store ?? "", 
+                            TextDesc = a.TextDesc ?? "", 
+                            DocDate = a.DocDate,
+                            BaselineDate = a.BaselineDate,
+                            NetDueDt = a.NetDueDt,
+                            NoSubmitted = a.NoSubmitted ?? "", 
+                            StatusTukarFaktur = a.StatusTukarFaktur ?? "Not Ok",
+                            Status = a.Status ?? "Not Created",
+                            Action = a.Action ?? "Draft",
+                            BusA = a.BusA,
+                            TglKirimBarang = a.TglKirimBarang,
+                            TempatTukarFaktur = a.TempatTukarFaktur ?? "",
+                            TgKirimBerkasKeKAMT = a.TgKirimBerkasKeKAMT,
+                            TglTerimaDOBack = a.TglTerimaDOBack,
+                            TglTerimaFakturPajak = a.TglTerimaFakturPajak,
+                            TglCompletedDoc = a.TglCompletedDoc,
+                            TglTukarFaktur = a.TglTukarFaktur,
+                            TanggalBayar = a.TanggalBayar,
+                            TglTerimaBerkas = a.TglTerimaBerkas,
+                            IdealTukarFaktur = a.IdealTukarFaktur,
+                            TOPOutlet = a.TOPOutlet,
+                            OverdueDatabaseSAP = a.OverdueDatabaseSAP ?? "",
+                            StatusOverdueDatabase = a.StatusOverdueDatabase ?? "",
+                            StatusInternalSAP = a.StatusInternalSAP ?? "",
+                            StatusExternalTOPOutlet = a.StatusExternalTOPOutlet ?? "",
+                            Keterangan = a.Keterangan ?? "",
+                            ActionCabangMT = a.ActionCabangMT ?? "",
+                            RealisasiCabangMT = a.RealisasiCabangMT ?? "",
+                            CreatedBy = a.CreatedBy ?? "",
+                            UpdatedAt = a.UpdatedAt,
+                            UpdatedBy = a.UpdatedBy
+                        };
+
+            // Apply filter if provided
+            if (!string.IsNullOrEmpty(filter))
+            {
+                filter = filter.ToUpper();
+                query = query.Where(x =>
+                    x.CabangId.ToUpper().Contains(filter)
+                    || x.IDCustomerSoldTo.ToString().Contains(filter)
+                    || x.Status.ToUpper().Contains(filter)
+                    || x.StatusTukarFaktur.ToUpper().Contains(filter)
+                );
+            }
+
+            // Apply sorting based on sortOrder and sortDirection
+            sortOrder = sortOrder ?? InvoiceDetailsColumn.DocDate;
+            sortDirection = sortDirection ?? SortingDirection.Descending;
+
+            switch (sortOrder)
+            {
+                case InvoiceDetailsColumn.DocDate:
+                    query = sortDirection == SortingDirection.Ascending
+                        ? query.OrderBy(x => x.DocDate)
+                        : query.OrderByDescending(x => x.DocDate);
+                    break;
+                case InvoiceDetailsColumn.CustomerName:
+                    query = sortDirection == SortingDirection.Ascending
+                        ? query.OrderBy(x => x.CustomerName)
+                        : query.OrderByDescending(x => x.CustomerName);
+                    break;
+                default:
+                    query = query.OrderByDescending(x => x.DocDate);
+                    break;
+            }
+
+            return query;
+        }
+
         // private IQueryable<IncomingPaymentDto> QueryIncomingPaymentList(string filter,
         // IncomingPaymentColumn? sortOrder,
         // SortingDirection? sortDirection)
@@ -1368,6 +1563,58 @@ namespace Ajinomoto.Arc.Business.Modules
                     throw;
                 }
             }).ConfigureAwait(false);
+        }
+
+        public async Task<ResultBase> UpdateBaseLine(UpdateBaseLineRequest request)
+        {
+        
+            var result = new ResultBase { Success = false };
+            return await Task.Run(async () =>
+            {    
+                try
+                {
+                    if (request.InvoiceDetailsId == null)
+                    {
+                        result.Message = "Invoice details ID is null.";
+                        return result;
+                    }
+
+                    var invoiceDetails = _domainService.GetInvoiceDetailsById(request.InvoiceDetailsId).FirstOrDefault();
+                    if (invoiceDetails == null)
+                    {
+                        result.Message = "Invoice details not found.";
+                        return result;
+                    }
+
+                    if (request.TglTerimaDoBack != null)
+                    {
+                        invoiceDetails.TglTerimaDOBack = request.TglTerimaDoBack;
+                    }
+                    if (request.TglTerimaFakturPajak != null)
+                    {
+                        invoiceDetails.TglTerimaFakturPajak = request.TglTerimaFakturPajak;
+                    }
+                    if (request.TglCompletedDoc != null)
+                    {
+                        invoiceDetails.TglCompletedDoc = request.TglCompletedDoc;
+                    }
+                    if (request.TglTukarFaktur != null)
+                    {
+                        invoiceDetails.TglTukarFaktur = request.TglTukarFaktur;
+                    }
+
+                    _domainService.UpdateInvoiceDetails(invoiceDetails);
+
+                    result.Success = true;
+                    result.Message = "Invoice details updated successfully.";
+                    return result;
+                }
+                catch (Exception ex)
+                {
+                    result.Message = $"Error updating invoice details: {ex.Message}";
+                    return result;
+                }
+            });
         }
     }
 }

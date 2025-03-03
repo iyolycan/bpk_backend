@@ -1,4 +1,5 @@
-﻿using Ajinomoto.Arc.Data.Models;
+﻿using Ajinomoto.Arc.Common.DtoModels;
+using Ajinomoto.Arc.Data.Models;
 using Microsoft.EntityFrameworkCore.Storage;
 
 namespace Ajinomoto.Arc.Business.Interfaces
@@ -24,7 +25,10 @@ namespace Ajinomoto.Arc.Business.Interfaces
         IQueryable<IncomingPaymentCutOff> GetAllIncomingPaymentCutOff();
         IQueryable<IncomingPaymentNonSpm> GetAllIncomingPaymentNonSpm();
         IQueryable<IncomingPaymentView> GetAllIncomingPaymentView();
+        IQueryable<InvoiceDetails> GetAllInvoiceDetailsView();
         IQueryable<Invoice> GetAllInvoice();
+        IQueryable<InvoiceDetails> GetInvoiceDetailsById(string invoiceDetailsId);
+        IQueryable<InvoiceDetails> UpdateInvoiceDetails(InvoiceDetails model);
         IQueryable<KpiSummary> GetAllKpiSummary();
         IQueryable<KpiProperty> GetAllKpiProperty();
         IQueryable<Potongan> GetAllPotongan();
@@ -62,6 +66,7 @@ namespace Ajinomoto.Arc.Business.Interfaces
         void UpdateBranch(Branch model);
         void DeleteBranch(Branch model);
         Guid InsertIncomingPayment(IncomingPayment model);
+        Guid InsertInvoiceDetails(InvoiceDetails model);
         void UpdateIncomingPayment(IncomingPayment model);
         void UpdateBulkIncomingPayment(List<IncomingPayment> models);
         void DeleteIncomingPayment(IncomingPayment model);

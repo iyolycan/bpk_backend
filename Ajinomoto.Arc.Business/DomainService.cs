@@ -1,4 +1,5 @@
 ﻿using Ajinomoto.Arc.Business.Interfaces;
+using Ajinomoto.Arc.Common.DtoModels;
 using Ajinomoto.Arc.Data;
 using Ajinomoto.Arc.Data.Models;
 using Microsoft.EntityFrameworkCore;
@@ -96,6 +97,10 @@ namespace Ajinomoto.Arc.Business
         {
             return _dataContext.IncomingPayments;
         }
+        public IQueryable<InvoiceDetails> GetAllInvoiceDetailsView()
+        {
+            return _dataContext.InvoiceDetails;
+        }
 
         public IQueryable<IncomingPaymentCutOff> GetAllIncomingPaymentCutOff()
         {
@@ -192,6 +197,31 @@ namespace Ajinomoto.Arc.Business
             }
         }
 
+        public IQueryable<InvoiceDetails> GetInvoiceDetailsById(string invoiceDetailsId)
+        {
+            return _dataContext.InvoiceDetails.Where(id => id.InvoiceDetailsId == invoiceDetailsId);
+        }
 
+        public IQueryable<InvoiceDetails> UpdateInvoiceDetails(InvoiceDetails model)
+        {
+            try
+            {
+            var existingInvoiceDetails = _dataContext.InvoiceDetails.FirstOrDefault(id => id.InvoiceDetailsId == model.InvoiceDetailsId);
+            if (existingInvoiceDetails == null)
+            {
+                throw new KeyNotFoundException("InvoiceDetails not found");
+            }
+
+            _dataContext.Entry(existingInvoiceDetails).CurrentValues.SetValues(model);
+            _dataContext.SaveChanges();
+
+            return _dataContext.InvoiceDetails.Where(id => id.InvoiceDetailsId == model.InvoiceDetailsId);
+            }
+            catch (Exception ex)
+            {
+            Log.Logger.Error($"Method: UpdateInvoiceDetails(), Message: {ex}");
+            throw;
+            }
+        }
     }
 }

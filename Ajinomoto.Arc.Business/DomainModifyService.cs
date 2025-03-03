@@ -322,6 +322,20 @@ namespace Ajinomoto.Arc.Business
                 throw;
             }
         }
+        public Guid InsertInvoiceDetails(InvoiceDetails model)
+        {
+            try
+            {
+                _dataContext.InvoiceDetails.Add(model);
+
+                return Guid.Parse(model.InvoiceDetailsId);
+            }
+            catch (Exception ex)
+            {
+                Log.Logger.Error($"Method: InsertIncomingPayment(), model: {model}, Message: {ex}");
+                throw;
+            }
+        }
 
         public void UpdateIncomingPayment(IncomingPayment model)
         {

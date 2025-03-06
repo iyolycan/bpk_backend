@@ -1607,6 +1607,10 @@ namespace Ajinomoto.Arc.Business.Modules
                                     FullName = a.FullName,
                                     IsActive = a.IsActive,
                                     RoleId = a.RoleId,
+                                    RoleInvoice = a.RoleInvoice,
+                                    ApprovalId = a.ApprovalId ?? 0,
+                                    ApprovalName = a.ApprovalName,
+                                    ApprovalEmail = a.ApprovalEmail,
                                     IsSetUserArea = b.DataLevelId == (int)DataLevelEnum.AreaLevel ? !b.IsSetOnSpecificArea : false,
                                     IsSetUserBranch = b.DataLevelId == (int)DataLevelEnum.BranchLevel ? !b.IsSetOnSpecificBranch : false
                                 }).SingleOrDefault();

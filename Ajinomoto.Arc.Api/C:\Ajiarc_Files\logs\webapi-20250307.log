@@ -7,3 +7,51 @@
 [2025-03-07 01:56:06.611 +07:00  WRN]  Sensitive data logging is enabled. Log entries and exception messages may include sensitive application data; this mode should only be enabled during development. 
 [2025-03-07 02:52:03.667 +07:00  WRN]  Failed to determine the https port for redirect. 
 [2025-03-07 02:52:05.087 +07:00  WRN]  Sensitive data logging is enabled. Log entries and exception messages may include sensitive application data; this mode should only be enabled during development. 
+[2025-03-07 03:30:06.757 +07:00  WRN]  Failed to determine the https port for redirect. 
+[2025-03-07 03:30:07.651 +07:00  WRN]  Sensitive data logging is enabled. Log entries and exception messages may include sensitive application data; this mode should only be enabled during development. 
+[2025-03-07 03:36:20.286 +07:00  WRN]  Failed to determine the https port for redirect. 
+[2025-03-07 03:36:21.146 +07:00  WRN]  Sensitive data logging is enabled. Log entries and exception messages may include sensitive application data; this mode should only be enabled during development. 
+[2025-03-07 03:42:50.566 +07:00  WRN]  Failed to determine the https port for redirect. 
+[2025-03-07 03:42:51.967 +07:00  WRN]  Sensitive data logging is enabled. Log entries and exception messages may include sensitive application data; this mode should only be enabled during development. 
+[2025-03-07 03:49:18.578 +07:00  WRN]  Failed to determine the https port for redirect. 
+[2025-03-07 03:49:19.606 +07:00  WRN]  Sensitive data logging is enabled. Log entries and exception messages may include sensitive application data; this mode should only be enabled during development. 
+[2025-03-07 03:49:20.480 +07:00  ERR]  Failed executing DbCommand (12ms) [Parameters=[@__userId_0='3'], CommandType='"Text"', CommandTimeout='30']
+SELECT `u`.`app_user_id` AS `UserId`, `u`.`email` AS `Email`, `u`.`full_name` AS `FullName`, `u`.`is_active` AS `IsActive`, `u`.`role_id` AS `RoleId`, `u`.`role_invoice` AS `RoleInvoice`, COALESCE(`u`.`approval_id`, 0) AS `ApprovalId`, `u`.`approval_name` AS `ApprovalName`, `u`.`approval_email` AS `ApprovalEmail`, CASE
+    WHEN `r`.`data_level_id` = 3 THEN NOT (`r`.`is_set_on_specific_area`)
+    ELSE FALSE
+END AS `IsSetUserArea`, CASE
+    WHEN `r`.`data_level_id` = 2 THEN NOT (`r`.`is_set_on_specific_branch`)
+    ELSE FALSE
+END AS `IsSetUserBranch`
+FROM `user_view` AS `u`
+INNER JOIN `role` AS `r` ON `u`.`role_id` = `r`.`role_id`
+WHERE (`u`.`app_user_id` <> 1) AND (`u`.`app_user_id` = @__userId_0)
+LIMIT 2 
+[2025-03-07 03:49:20.505 +07:00  ERR]  An exception occurred while iterating over the results of a query for context type 'Ajinomoto.Arc.Data.DataContext'.
+MySqlConnector.MySqlException (0x80004005): Unknown column 'u.role_invoice' in 'field list'
+   at MySqlConnector.Core.ResultSet.ReadResultSetHeaderAsync(IOBehavior ioBehavior) in /_/src/MySqlConnector/Core/ResultSet.cs:line 43
+   at MySqlConnector.MySqlDataReader.ActivateResultSet(CancellationToken cancellationToken) in /_/src/MySqlConnector/MySqlDataReader.cs:line 130
+   at MySqlConnector.MySqlDataReader.CreateAsync(CommandListPosition commandListPosition, ICommandPayloadCreator payloadCreator, IDictionary`2 cachedProcedures, IMySqlCommand command, CommandBehavior behavior, Activity activity, IOBehavior ioBehavior, CancellationToken cancellationToken) in /_/src/MySqlConnector/MySqlDataReader.cs:line 468
+   at MySqlConnector.Core.CommandExecutor.ExecuteReaderAsync(IReadOnlyList`1 commands, ICommandPayloadCreator payloadCreator, CommandBehavior behavior, Activity activity, IOBehavior ioBehavior, CancellationToken cancellationToken) in /_/src/MySqlConnector/Core/CommandExecutor.cs:line 56
+   at MySqlConnector.MySqlCommand.ExecuteReaderAsync(CommandBehavior behavior, IOBehavior ioBehavior, CancellationToken cancellationToken) in /_/src/MySqlConnector/MySqlCommand.cs:line 344
+   at MySqlConnector.MySqlCommand.ExecuteDbDataReader(CommandBehavior behavior) in /_/src/MySqlConnector/MySqlCommand.cs:line 278
+   at System.Data.Common.DbCommand.ExecuteReader()
+   at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteReader(RelationalCommandParameterObject parameterObject)
+   at Microsoft.EntityFrameworkCore.Query.Internal.SingleQueryingEnumerable`1.Enumerator.InitializeReader(Enumerator enumerator)
+   at Microsoft.EntityFrameworkCore.Query.Internal.SingleQueryingEnumerable`1.Enumerator.<>c.<MoveNext>b__21_0(DbContext _, Enumerator enumerator)
+   at Pomelo.EntityFrameworkCore.MySql.Storage.Internal.MySqlExecutionStrategy.Execute[TState,TResult](TState state, Func`3 operation, Func`3 verifySucceeded)
+   at Microsoft.EntityFrameworkCore.Query.Internal.SingleQueryingEnumerable`1.Enumerator.MoveNext() 
+MySqlConnector.MySqlException (0x80004005): Unknown column 'u.role_invoice' in 'field list'
+   at MySqlConnector.Core.ResultSet.ReadResultSetHeaderAsync(IOBehavior ioBehavior) in /_/src/MySqlConnector/Core/ResultSet.cs:line 43
+   at MySqlConnector.MySqlDataReader.ActivateResultSet(CancellationToken cancellationToken) in /_/src/MySqlConnector/MySqlDataReader.cs:line 130
+   at MySqlConnector.MySqlDataReader.CreateAsync(CommandListPosition commandListPosition, ICommandPayloadCreator payloadCreator, IDictionary`2 cachedProcedures, IMySqlCommand command, CommandBehavior behavior, Activity activity, IOBehavior ioBehavior, CancellationToken cancellationToken) in /_/src/MySqlConnector/MySqlDataReader.cs:line 468
+   at MySqlConnector.Core.CommandExecutor.ExecuteReaderAsync(IReadOnlyList`1 commands, ICommandPayloadCreator payloadCreator, CommandBehavior behavior, Activity activity, IOBehavior ioBehavior, CancellationToken cancellationToken) in /_/src/MySqlConnector/Core/CommandExecutor.cs:line 56
+   at MySqlConnector.MySqlCommand.ExecuteReaderAsync(CommandBehavior behavior, IOBehavior ioBehavior, CancellationToken cancellationToken) in /_/src/MySqlConnector/MySqlCommand.cs:line 344
+   at MySqlConnector.MySqlCommand.ExecuteDbDataReader(CommandBehavior behavior) in /_/src/MySqlConnector/MySqlCommand.cs:line 278
+   at System.Data.Common.DbCommand.ExecuteReader()
+   at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteReader(RelationalCommandParameterObject parameterObject)
+   at Microsoft.EntityFrameworkCore.Query.Internal.SingleQueryingEnumerable`1.Enumerator.InitializeReader(Enumerator enumerator)
+   at Microsoft.EntityFrameworkCore.Query.Internal.SingleQueryingEnumerable`1.Enumerator.<>c.<MoveNext>b__21_0(DbContext _, Enumerator enumerator)
+   at Pomelo.EntityFrameworkCore.MySql.Storage.Internal.MySqlExecutionStrategy.Execute[TState,TResult](TState state, Func`3 operation, Func`3 verifySucceeded)
+   at Microsoft.EntityFrameworkCore.Query.Internal.SingleQueryingEnumerable`1.Enumerator.MoveNext()
+[2025-03-07 03:49:20.508 +07:00  ERR]  Method: GetUser(), UserId: 3, Message: Unknown column 'u.role_invoice' in 'field list' 

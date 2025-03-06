@@ -259,7 +259,11 @@ namespace Ajinomoto.Arc.Business.Modules
                               Username = a.Username,
                               RoleId = a.RoleId,
                               DataLevelId = b.DataLevelId,
-                              PasswordHash = a.Password
+                              PasswordHash = a.Password,
+                              RoleInvoice = a.RoleInvoice,
+                            ApprovalId = a.ApprovalId,
+                            ApprovalName = a.ApprovalName,
+                            ApprovalEmail = a.ApprovalEmail,
                           }).SingleOrDefault();
 
             return result;

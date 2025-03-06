@@ -34,6 +34,22 @@ namespace Ajinomoto.Arc.Data.Models
         public string Password { get; set; } = null!;
         [Column("role_id", TypeName = "int(11)")]
         public int RoleId { get; set; }
+        
+        [Column("role_invoice")]
+        [StringLength(10)]
+        public string? RoleInvoice { get; set; } = null!;
+        
+        [Column("approval_id", TypeName = "int(11)")]
+        public int? ApprovalId { get; set; } = null!;
+
+        [Column("approval_name")]
+        [StringLength(50)]
+        public string? ApprovalName { get; set; } = null!;
+        
+        [Column("approval_email")]
+        [StringLength(50)]
+        public string? ApprovalEmail { get; set; } = null!;
+
         [Column("is_active")]
         public bool IsActive { get; set; }
         [Column("created_at", TypeName = "timestamp")]

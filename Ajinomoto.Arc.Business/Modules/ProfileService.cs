@@ -24,6 +24,7 @@ namespace Ajinomoto.Arc.Business.Modules
                     throw new Exception("Unauthorized");
                 }
 
+                Console.WriteLine("email cek: " + user?.Email);
                 return user;
             }
             catch (Exception ex)

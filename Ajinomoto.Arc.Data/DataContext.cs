@@ -31,6 +31,7 @@ namespace Ajinomoto.Arc.Data
         public virtual DbSet<DataLevel> DataLevels { get; set; } = null!;
         public virtual DbSet<IncomingPayment> IncomingPayments { get; set; } = null!;
         public virtual DbSet<InvoiceDetails> InvoiceDetails { get; set; } = null!;
+        public virtual DbSet<InvoiceInbox> InvoiceInbox { get; set; } = null!;
         public virtual DbSet<IncomingPaymentCutOff> IncomingPaymentCutOffs { get; set; } = null!;
         public virtual DbSet<IncomingPaymentNonSpm> IncomingPaymentNonSpms { get; set; } = null!;
         public virtual DbSet<IncomingPaymentView> IncomingPaymentViews { get; set; } = null!;

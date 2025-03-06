@@ -2,7 +2,9 @@
 using Ajinomoto.Arc.Business.Interfaces;
 using Ajinomoto.Arc.Common.DtoModels;
 using Ajinomoto.Arc.Common.Enums;
+using Ajinomoto.Arc.Data;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace Ajinomoto.Arc.Api.Controllers
 {
@@ -12,10 +14,14 @@ namespace Ajinomoto.Arc.Api.Controllers
     public class PaymentController : ControllerBase
     {
         private readonly IPaymentFacade _paymentFacade;
+        private readonly DbContextOptions<DataContext> _dbContextOptions;
 
-        public PaymentController(IPaymentFacade paymentFacade)
+        public PaymentController(
+            IPaymentFacade paymentFacade,
+            DbContextOptions<DataContext> dbContextOptions)
         {
             _paymentFacade = paymentFacade;
+            _dbContextOptions = dbContextOptions;
         }
 
         [Route("IncomingPayments")]
@@ -43,6 +49,37 @@ namespace Ajinomoto.Arc.Api.Controllers
             var resVal = await _paymentFacade.UpdateBaseLine(request);
 
             return Ok(resVal);
+        }
+
+        [Route("InboxList")]
+        [HttpPost]
+        public async Task<ActionResult> InboxList()
+        {
+            using (var context = new DataContext(_dbContextOptions))
+            {
+                var itemsRes = await context.InvoiceInbox.FromSqlRaw("SELECT * FROM invoice_inbox").ToListAsync();
+
+                var response = new
+                {
+                    success = true,
+                    message = "Successfully!",
+                    model = new
+                    {
+                        currentPage = 1,
+                        totalPages = 1,
+                        pageSize = 10,
+                        totalCount = itemsRes.Count,
+                        hasPrevious = false,
+                        hasNext = false,
+                        filter = "",
+                        currentSort = "DocDate",
+                        sortDirection = "Descending",
+                        items = itemsRes
+                    }
+                };
+
+                return Ok(response);
+            }
         }
 
         [Authorize((int)RoleEnum.Administrator, (int)RoleEnum.Coec)]

@@ -1,0 +1,9 @@
+[2025-03-07 01:25:26.018 +07:00  WRN]  Failed to determine the https port for redirect. 
+[2025-03-07 01:25:28.674 +07:00  WRN]  Sensitive data logging is enabled. Log entries and exception messages may include sensitive application data; this mode should only be enabled during development. 
+[2025-03-07 01:49:37.936 +07:00  WRN]  Failed to determine the https port for redirect. 
+[2025-03-07 01:49:39.092 +07:00  WRN]  Sensitive data logging is enabled. Log entries and exception messages may include sensitive application data; this mode should only be enabled during development. 
+[2025-03-07 01:49:49.916 +07:00  ERR]  Method: ImportInvoiceTemplate01, filePath: /Users/cahyosusilo/Ajiarc_Files/0lm1rrbvwbz.xlsx, Message: No database provider has been configured for this DbContext. A provider can be configured by overriding the 'DbContext.OnConfiguring' method or by using 'AddDbContext' on the application service provider. If 'AddDbContext' is used, then also ensure that your DbContext type accepts a DbContextOptions<TContext> object in its constructor and passes it to the base constructor for DbContext. 
+[2025-03-07 01:56:05.668 +07:00  WRN]  Failed to determine the https port for redirect. 
+[2025-03-07 01:56:06.611 +07:00  WRN]  Sensitive data logging is enabled. Log entries and exception messages may include sensitive application data; this mode should only be enabled during development. 
+[2025-03-07 02:52:03.667 +07:00  WRN]  Failed to determine the https port for redirect. 
+[2025-03-07 02:52:05.087 +07:00  WRN]  Sensitive data logging is enabled. Log entries and exception messages may include sensitive application data; this mode should only be enabled during development. 

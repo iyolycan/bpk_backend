@@ -5,6 +5,29 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Ajinomoto.Arc.Data.Models
 {
+    [Table("invoice_inbox")] // Maps to the `invoice_details` table
+    public partial class InvoiceInbox{
+        [Key] // Primary key
+        [Column("invoice_inbox_id")]
+        public string InvoiceInboxId { get; set; } // UUID will be generated manually
+
+        [Column("no_pengajuan")]
+        public string NoPengajuan { get; set; }
+
+        [Column("tgl_pengajuan")]
+        public DateOnly TglPengajuan { get; set; } = DateOnly.FromDateTime(DateTime.Now); // Default value
+
+        [Column("total_invoice")]
+        public double TotalInvoice { get; set; }
+
+        [Column("user_request_id")]
+        public int UserRequestId { get; set; }
+
+        [Column("user_request_name")]
+        public string UserRequestName { get; set; }
+    }
+
+
     [Table("invoice_details")] // Maps to the `invoice_details` table
     public partial class InvoiceDetails
     {

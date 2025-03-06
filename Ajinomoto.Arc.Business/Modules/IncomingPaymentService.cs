@@ -11,9 +11,8 @@ using Microsoft.Extensions.Options;
 using Serilog;
 using System.Data;
 using Ajinomoto.Arc.Data.Models;
-using System;
 using Microsoft.EntityFrameworkCore;
-using System.Diagnostics;
+using Ajinomoto.Arc.Data;
 
 namespace Ajinomoto.Arc.Business.Modules
 {
@@ -23,21 +22,27 @@ namespace Ajinomoto.Arc.Business.Modules
         private readonly IProfileService _profileService;
         private readonly IHistoryService _historyService;
         private readonly IMasterDataService _masterDataService;
-        private readonly DbContext _context;
 
+        private readonly IMailService _mailService;
         private readonly AppSettings _appSettings;
+
+        private readonly DbContextOptions<DataContext> _dbContextOptions;
 
         public IncomingPaymentService(IDomainService domainService,
             IOptions<AppSettings> appSettings,
             IProfileService profileService,
             IHistoryService historyService,
-            IMasterDataService masterDataService)
+            IMasterDataService masterDataService,
+            IMailService mailService,
+            DbContextOptions<DataContext> dbContextOptions)
         {
             _domainService = domainService;
             _appSettings = appSettings.Value;
             _profileService = profileService;
             _historyService = historyService;
             _masterDataService = masterDataService;
+            _mailService = mailService;
+             _dbContextOptions = dbContextOptions;
         }
 
         public async Task<IncomingPaymentListResponse> GetIncomingPaymentList(string filter,

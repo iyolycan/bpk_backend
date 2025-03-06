@@ -1,13 +1,19 @@
 using System.Globalization;
+using Ajinomoto.Arc.Business.Interfaces;
 using Ajinomoto.Arc.Common.AppModels;
+using Ajinomoto.Arc.Common.Constants;
+using Ajinomoto.Arc.Common.DtoModels;
 using Ajinomoto.Arc.Data.Models;
 using ClosedXML.Excel;
+using Ajinomoto.Arc.Data;
 using Serilog;
+using Microsoft.EntityFrameworkCore;
 
 namespace Ajinomoto.Arc.Business.Modules
 {
     public partial class IncomingPaymentService
     {
+
         private ResultBase ImportInvoiceTemplate01(string filePath)
         {
             var result = new ResultBase
@@ -20,10 +26,14 @@ namespace Ajinomoto.Arc.Business.Modules
             try
             {
                 var userLogin = _profileService.GetUserLogin();
-
+                Console.WriteLine("Raw User Login Data: " + Newtonsoft.Json.JsonConvert.SerializeObject(userLogin));
                 var now = DateTime.Now;
                 var currentUser = userLogin.Username;
+                var userApprovalEmail = userLogin.ApprovalEmail;
+                var userApprovalName = userLogin.ApprovalName;
                 var currentApp = userLogin.App;
+                var TotalAmount = 0;
+                var TotalInvoice = 0;
 
                 using (XLWorkbook wb = new XLWorkbook(filePath))
                 {
@@ -168,22 +178,68 @@ namespace Ajinomoto.Arc.Business.Modules
                         };
 
                         // Save to database (example)
-                        Console.WriteLine("Worksheet cek: " + invoiceDetails);
                         _domainService.InsertInvoiceDetails(invoiceDetails);
+                        TotalAmount += (int)(TryParseDoubleWithSeparator(amtInLocCur, "AmtInLocCur", i) ?? 0);
+                        TotalInvoice = lastRow - initialRow + 1;
                     }
+                }
+
+                // Save to table invoice_inbox
+                var uniqueRequestNumber = $"REQ-{DateTime.Now:yyyyMMddHHmmss}-{Guid.NewGuid():N}".Substring(0, 20);
+                using (var context = new DataContext(_dbContextOptions))
+                {
+                    var insertQuery = $@"
+                        INSERT INTO invoice_inbox (invoice_inbox_id, no_pengajuan, tgl_pengajuan, total_invoice, user_request_id, user_request_name)
+                        VALUES ('{Guid.NewGuid():N}', '{uniqueRequestNumber}', '{DateTime.Now:yyyy-MM-dd}', {TotalAmount}, {userLogin.Id}, '{currentUser}')
+                    ";
+
+                    context.Database.ExecuteSqlRaw(insertQuery);
                 }
 
                 result.Success = true;
                 result.Message = "Invoice details uploaded successfully.";
                 _domainService.SaveChanges();
 
+                if (!string.IsNullOrEmpty(userApprovalEmail)){
+                    // Send an email notification to the user
+                    var mailRequest = new MailRequest
+                    {
+                        ToEmail = new List<string>(),
+                        Subject = "[BPK Web] Approval Baseline date invoice Requestno "+uniqueRequestNumber,
+                    };
+
+                    mailRequest.ToEmail.Add(userApprovalEmail);
+
+                    var content = "";
+                    content += string.Format("Dear {0},", userApprovalName);
+                    content += "<br/>Please kindly review and approve the request below :<br/>";
+                    content += string.Format("Requestor : {0}<br/>", currentUser);
+                    content += string.Format("Jumlah invoice : {0}<br/>", TotalInvoice);
+                    content += string.Format("Total Nominal : {0}<br/>", TotalAmount);
+
+                    mailRequest.Body = string.Format(@"
+                        <html>
+                        <body>
+                            <p>{0}</p>
+                            <p>To view detail request, click the following link :</p>
+                            <p>Link</p>
+                            <br/>
+                            <p>Best Regards,</p>
+                            <p>Web BPK</p>
+                        </body>
+                        </html>", content);
+
+                    // send the email
+                    _mailService.SendEmailAsyncInvoice(mailRequest);
+                }
+
                 return result;
             }
             catch (Exception ex)
             {
                 Log.Logger.Error($"Method: ImportInvoiceTemplate01, filePath: {filePath}, Message: {ex.Message}");
-                result.Message = $"Method: ImportInvoiceTemplate01, filePath: {filePath}, Message: {ex.Message}";
-                // result.Message = "An error occurred while processing the file.";
+                // result.Message = $"Method: ImportInvoiceTemplate01, filePath: {filePath}, Message: {ex.Message}";
+                result.Message = "An error occurred while processing the file.";
                 return result;
             }
             finally

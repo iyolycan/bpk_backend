@@ -5,5 +5,6 @@ namespace Ajinomoto.Arc.Business.Interfaces
     public interface IMailService
     {
         Task SendEmailAsync(MailRequest mailRequest);
+        Task SendEmailAsyncInvoice(MailRequest mailRequest);
     }
 }

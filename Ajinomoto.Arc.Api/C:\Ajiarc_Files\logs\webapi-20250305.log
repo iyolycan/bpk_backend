@@ -1,0 +1,43 @@
+[2025-03-05 01:41:43.482 +07:00  WRN]  Failed to determine the https port for redirect. 
+[2025-03-05 01:41:44.994 +07:00  WRN]  Sensitive data logging is enabled. Log entries and exception messages may include sensitive application data; this mode should only be enabled during development. 
+[2025-03-05 01:42:12.888 +07:00  ERR]  Method: ImportInvoiceTemplate01, filePath: /Users/cahyosusilo/Ajiarc_Files/f1zcfivxm1g.xlsx, Message: Object reference not set to an instance of an object. 
+[2025-03-05 01:45:03.126 +07:00  ERR]  Method: ImportInvoiceTemplate01, filePath: /Users/cahyosusilo/Ajiarc_Files/12oks3e2aa3.xlsx, Message: Object reference not set to an instance of an object. 
+[2025-03-05 01:57:01.741 +07:00  WRN]  Failed to determine the https port for redirect. 
+[2025-03-05 01:57:02.901 +07:00  WRN]  Sensitive data logging is enabled. Log entries and exception messages may include sensitive application data; this mode should only be enabled during development. 
+[2025-03-05 01:57:04.536 +07:00  ERR]  Method: ImportInvoiceTemplate01, filePath: /Users/cahyosusilo/Ajiarc_Files/mqzvav31u5w.xlsx, Message: Object reference not set to an instance of an object. 
+[2025-03-05 02:03:03.187 +07:00  WRN]  Failed to determine the https port for redirect. 
+[2025-03-05 02:03:04.487 +07:00  WRN]  Sensitive data logging is enabled. Log entries and exception messages may include sensitive application data; this mode should only be enabled during development. 
+[2025-03-05 02:07:07.446 +07:00  ERR]  Method: ImportInvoiceTemplate01, filePath: /Users/cahyosusilo/Ajiarc_Files/eo4yq22mjhb.xlsx, Message: Object reference not set to an instance of an object. 
+[2025-03-05 02:07:52.893 +07:00  ERR]  Method: ImportInvoiceTemplate01, filePath: /Users/cahyosusilo/Ajiarc_Files/jtl2olsahnf.xlsx, Message: Object reference not set to an instance of an object. 
+[2025-03-05 02:10:08.071 +07:00  WRN]  Failed to determine the https port for redirect. 
+[2025-03-05 02:10:09.027 +07:00  WRN]  Sensitive data logging is enabled. Log entries and exception messages may include sensitive application data; this mode should only be enabled during development. 
+[2025-03-05 02:10:10.746 +07:00  ERR]  Method: ImportInvoiceTemplate01, filePath: /Users/cahyosusilo/Ajiarc_Files/qiqpn2hh1xv.xlsx, Message: Object reference not set to an instance of an object. 
+[2025-03-05 02:12:11.239 +07:00  WRN]  Failed to determine the https port for redirect. 
+[2025-03-05 02:12:12.444 +07:00  WRN]  Sensitive data logging is enabled. Log entries and exception messages may include sensitive application data; this mode should only be enabled during development. 
+[2025-03-05 02:12:14.059 +07:00  ERR]  Method: ImportInvoiceTemplate01, filePath: /Users/cahyosusilo/Ajiarc_Files/cqvydqsomc3.xlsx, Message: Object reference not set to an instance of an object. 
+[2025-03-05 02:15:11.057 +07:00  WRN]  Failed to determine the https port for redirect. 
+[2025-03-05 02:15:17.401 +07:00  WRN]  Sensitive data logging is enabled. Log entries and exception messages may include sensitive application data; this mode should only be enabled during development. 
+[2025-03-05 02:15:18.819 +07:00  ERR]  Method: ImportInvoiceTemplate01, filePath: /Users/cahyosusilo/Ajiarc_Files/oatv0uenqpi.xlsx, Message: Object reference not set to an instance of an object. 
+[2025-03-05 02:27:40.112 +07:00  WRN]  Failed to determine the https port for redirect. 
+[2025-03-05 02:27:41.104 +07:00  WRN]  Sensitive data logging is enabled. Log entries and exception messages may include sensitive application data; this mode should only be enabled during development. 
+[2025-03-05 02:28:41.846 +07:00  ERR]  Method: ImportInvoiceTemplate01, filePath: /Users/cahyosusilo/Ajiarc_Files/5o2xvbriwi2.xlsx, Message: Object reference not set to an instance of an object. 
+[2025-03-05 02:42:03.396 +07:00  WRN]  Failed to determine the https port for redirect. 
+[2025-03-05 02:42:04.633 +07:00  WRN]  Sensitive data logging is enabled. Log entries and exception messages may include sensitive application data; this mode should only be enabled during development. 
+[2025-03-05 02:42:06.287 +07:00  ERR]  Method: ImportInvoiceTemplate01, filePath: /Users/cahyosusilo/Ajiarc_Files/oavsy2sbxlg.xlsx, Message: Object reference not set to an instance of an object. 
+[2025-03-05 02:51:55.912 +07:00  WRN]  Failed to determine the https port for redirect. 
+[2025-03-05 02:51:57.071 +07:00  WRN]  Sensitive data logging is enabled. Log entries and exception messages may include sensitive application data; this mode should only be enabled during development. 
+[2025-03-05 02:51:58.847 +07:00  ERR]  Method: ImportInvoiceTemplate01, filePath: /Users/cahyosusilo/Ajiarc_Files/0o2seqrq3xa.xlsx, Message: Object reference not set to an instance of an object. 
+[2025-03-05 02:54:01.433 +07:00  WRN]  Failed to determine the https port for redirect. 
+[2025-03-05 02:54:03.701 +07:00  WRN]  Sensitive data logging is enabled. Log entries and exception messages may include sensitive application data; this mode should only be enabled during development. 
+[2025-03-05 02:54:05.193 +07:00  ERR]  Method: ImportInvoiceTemplate01, filePath: /Users/cahyosusilo/Ajiarc_Files/q13ndtgjg3c.xlsx, Message: Object reference not set to an instance of an object. 
+[2025-03-05 02:58:04.071 +07:00  WRN]  Failed to determine the https port for redirect. 
+[2025-03-05 02:58:05.025 +07:00  WRN]  Sensitive data logging is enabled. Log entries and exception messages may include sensitive application data; this mode should only be enabled during development. 
+[2025-03-05 03:00:54.072 +07:00  WRN]  Failed to determine the https port for redirect. 
+[2025-03-05 03:00:55.030 +07:00  WRN]  Sensitive data logging is enabled. Log entries and exception messages may include sensitive application data; this mode should only be enabled during development. 
+[2025-03-05 03:00:56.841 +07:00  ERR]  Method: ImportInvoiceTemplate01, filePath: /Users/cahyosusilo/Ajiarc_Files/zcbtqytqaw4.xlsx, Message: Object reference not set to an instance of an object. 
+[2025-03-05 03:17:11.414 +07:00  WRN]  Failed to determine the https port for redirect. 
+[2025-03-05 03:17:13.101 +07:00  WRN]  Sensitive data logging is enabled. Log entries and exception messages may include sensitive application data; this mode should only be enabled during development. 
+[2025-03-05 03:21:59.633 +07:00  WRN]  Failed to determine the https port for redirect. 
+[2025-03-05 03:22:01.627 +07:00  WRN]  Sensitive data logging is enabled. Log entries and exception messages may include sensitive application data; this mode should only be enabled during development. 
+[2025-03-05 03:27:30.668 +07:00  WRN]  Failed to determine the https port for redirect. 
+[2025-03-05 03:27:31.997 +07:00  WRN]  Sensitive data logging is enabled. Log entries and exception messages may include sensitive application data; this mode should only be enabled during development. 

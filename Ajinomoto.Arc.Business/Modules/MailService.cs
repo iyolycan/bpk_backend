@@ -22,6 +22,7 @@ namespace Ajinomoto.Arc.Business.Modules
 
         public async Task SendEmailAsync(MailRequest mailRequest)
         {
+            Console.WriteLine("cek email starting 1");
             var email = new MimeMessage();
             email.Sender = MailboxAddress.Parse(_mailSettings.Mail);
 
@@ -84,18 +85,80 @@ namespace Ajinomoto.Arc.Business.Modules
 
             using var smtp = new SmtpClient();
 
+            Console.WriteLine("cek email starting");
             if (_mailSettings.IsUsingGmailSmtp)
             {
                 smtp.Connect(_mailSettings.Host, _mailSettings.Port, SecureSocketOptions.StartTls);
                 smtp.AuthenticationMechanisms.Remove("XOAUTH2"); // Must be removed for Gmail SMTP
                 smtp.Authenticate(_mailSettings.Mail, _mailSettings.Password);
+                Console.WriteLine("cek email: " + _mailSettings.Mail);
+                Console.WriteLine("cek email: " + _mailSettings.Mail);
             }
             else
             {
+                Console.WriteLine("cek email 2: " + _mailSettings.Mail);
                 smtp.Connect(_mailSettings.Host, _mailSettings.Port, SecureSocketOptions.None);
             }
 
-            await smtp.SendAsync(email);
+            try
+            {
+                await smtp.SendAsync(email);
+                Console.WriteLine("Email sent successfully to: " + string.Join(", ", mailRequest.ToEmail));
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("Failed to send email: " + ex.Message);
+            }
+            smtp.Disconnect(true);
+        }
+            // code here
+        public async Task SendEmailAsyncInvoice(MailRequest mailRequest)
+        {
+            var email = new MimeMessage();
+            email.Sender = MailboxAddress.Parse(_mailSettings.Mail);
+
+            foreach (var item in mailRequest.ToEmail)
+            {
+                email.To.Add(MailboxAddress.Parse(item));
+            }
+
+            email.Subject = mailRequest.Subject;
+
+            var builder = new BodyBuilder();
+            if (mailRequest.Attachments != null)
+            {
+                byte[] fileBytes;
+                foreach (var file in mailRequest.Attachments)
+                {
+                    if (file.Length > 0)
+                    {
+                        using (var ms = new MemoryStream())
+                        {
+                            file.CopyTo(ms);
+                            fileBytes = ms.ToArray();
+                        }
+
+                        builder.Attachments.Add(file.FileName, fileBytes, ContentType.Parse(file.ContentType));
+                    }
+                }
+            }
+
+            builder.HtmlBody = mailRequest.Body;
+            email.Body = builder.ToMessageBody();
+
+            using var smtp = new SmtpClient();
+            smtp.Connect(_mailSettings.Host, _mailSettings.Port, SecureSocketOptions.StartTls);
+            smtp.Authenticate(_mailSettings.Mail, _mailSettings.Password);
+
+            try
+            {
+                await smtp.SendAsync(email);
+                Console.WriteLine("Invoice email sent successfully to: " + string.Join(", ", mailRequest.ToEmail));
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("Failed to send invoice email: " + ex.Message);
+            }
             smtp.Disconnect(true);
         }
     }

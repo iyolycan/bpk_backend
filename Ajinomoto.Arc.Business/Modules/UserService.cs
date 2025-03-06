@@ -231,7 +231,12 @@ namespace Ajinomoto.Arc.Business.Modules
                             Id = a.AppUserId,
                             FullName = a.FullName,
                             Username = a.Username,
+                            Email = a.Email,
                             RoleId = a.RoleId,
+                            RoleInvoice = a.RoleInvoice,
+                            ApprovalId = a.ApprovalId,
+                            ApprovalName = a.ApprovalName,
+                            ApprovalEmail = a.ApprovalEmail,
                         }).SingleOrDefault();
 
             if (user != null)
